@@ -4,7 +4,7 @@ services:
 
   mongodb:
     image: mongo:latest
-    container_name: mongodb
+    container_name: mongodb_blockchain
     restart: always
     ports:
       - "27017:27017"   

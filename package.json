@@ -2,7 +2,29 @@
   "name": "BlockchainAssessment",
   "version": "1.0.0",
   "main": "index.js",
-  "author": "Joan Miquel Espada Sabat <joanmi@espada.cat>",
+  "author": "Joan Miquel Espada Sabat",
   "license": "MIT",
-  "private": true
+  "private": true,
+  "index": "./src/index.js",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-eslint": "^8.2.3",
+    "babel-preset-env": "^1.7.0",
+    "eslint": "^4.19.1",
+    "eslint-plugin-babel": "^5.1.0",
+    "eslint-plugin-jest": "^21.17.0",
+    "eslint-plugin-node": "^6.0.1",
+    "jest": "^23.1.0"
+  },
+  "scripts": {
+    "pretest": "eslint -c ./.eslintrc ./src",
+    "test": "jest ./src/* --verbose --env=node --coverage",
+    "build": "babel src -d ./build",
+    "start": "babel-node ./src/index.js"
+  },
+  "dependencies": {
+    "immutable": "^3.8.2",
+    "mongodb": "^3.0.10",
+    "path": "^0.12.7"
+  }
 }
