@@ -1,0 +1,8 @@
+{
+  "name": "BlockchainAssessment",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Joan Miquel Espada Sabat <joanmi@espada.cat>",
+  "license": "MIT",
+  "private": true
+}
