@@ -1,15 +1,16 @@
 import path from 'path'
-import mongo from 'mongodb'
 import Immutable from 'immutable'
 import fs from 'fs'
-const dbname = 'blockchain'
-const urlmongo =  'mongodb://localhost:27017'
-const dbcollection = 'transactions'
+import {collectionTrans, collectionUsers } from './constants'
+
 
 class CreateDB
 { 
+    constructor(database)
+    {
+        this.database= database
+    }
     
-
     async importFile(fileToBeImported)
     {
         var contents = fs.readFileSync(fileToBeImported, 'utf8');
@@ -17,44 +18,53 @@ class CreateDB
         return data
     }
 
-    async storeInDB(documents)
-    {
-        let client, database
-        try{
-            client = await mongo.MongoClient.connect(urlmongo)
-            database = await client.db(dbname)
-
-            const collection = database.collection(dbcollection)
-
-            collection.remove() 
-            
-            for(let i=0;i<documents.size;i++)
-            {
-                const aux = await documents.get(i)
-                collection.insert({_id: i, doc: aux})
-                 
-            }
-
-        }catch(err) {
-            console.log(err)
-        }finally{
-            
-
-            client.close()
+    async storeInDB(collection, documents)
+    {       
+        for(let i=0;i<documents.size;i++)
+        {
+            documents.get(i).then( (data) => collection.insertOne({_id: i, data}))        
         }
     }
 
-    start(filesToRead)
+    storeUsers(collection, users)
     {
-        const files = new Immutable.List(filesToRead)
+        for(let i=0; i<users.size;i++){
+            const user = users.get(i)
+            collection.insert( {_id:i, name: user.name, address: user.address, totalAmount:0} )  
+        }
+    }
+
+    loadFiles(filesToRead)
+    {
+        
         const docs= []
-        files.map( x=>{     
+        filesToRead.map( x=>{     
             const doc = this.importFile( path.resolve(__dirname,'..','transactions', x))
             docs.push(doc)
         })
-        const docsToProcess = new Immutable.fromJS(docs)
-        this.storeInDB(docsToProcess)
-        
+        return new Immutable.fromJS(docs)
+    }
+
+    async loadMainData(filesToRead, users)
+    {
+    
+        try{
+            
+            const docsToProcess = this.loadFiles(filesToRead)
+            
+            let collection1 = this.database.collection(collectionTrans)
+            collection1.remove() 
+
+            await this.storeInDB(collection1, docsToProcess)
+
+            let collection2 = this.database.collection(collectionUsers)
+            collection2.remove() 
+
+            this.storeUsers(collection2, users)
+            
+        }catch(err) {
+            console.log(err) //eslint-disable-line 
+        }
     }
 }
 
