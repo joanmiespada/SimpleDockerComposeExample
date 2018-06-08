@@ -2,11 +2,13 @@ import mongo from 'mongodb'
 import Immutable from 'immutable'
 import CreateDB from './createdb'
 import Sum from './sum'
-import {urlmongo,dbname} from './constants'
+import Render from './render'
+import {urlmongo, dbname} from './constants'
 
 
-const files = ['transactions-1.json',
+const files = [ 'transactions-1.json',
                 'transactions-2.json']
+
 const listOfusers = Immutable.List([
     {name:'Wesley Crusher', address:'mvd6qFeVkqH6MNAS2Y2cLifbdaX5XUkbZJ'},  
     {name:'Leonard McCoy', address:'mmFFG4jqAtw9MoCC88hw5FNfreQWuEHADp'},
@@ -28,8 +30,10 @@ mongo.MongoClient.connect(urlmongo).then( client =>{
         const operate = new Sum(database)
 
         operate.start()
-            .then(()=> {
-                //client.close()
+            .then((tops)=> {
+                
+                const render = new Render(database)
+                render.draw(tops).then( ()=> client.close() )
             } )
             .catch( err=> { 
                 console.log(err) //eslint-disable-line 

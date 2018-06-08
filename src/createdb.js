@@ -2,7 +2,7 @@ import path from 'path'
 import Immutable from 'immutable'
 import fs from 'fs'
 import {collectionTrans, collectionUsers } from './constants'
-
+import uuid from 'uuid/v1'
 
 class CreateDB
 { 
@@ -26,11 +26,17 @@ class CreateDB
         }
     }
 
-    storeUsers(collection, users)
+    async storeUsers(collection, users)
     {
         for(let i=0; i<users.size;i++){
-            const user = users.get(i)
-            collection.insert( {_id:i, name: user.name, address: user.address, totalAmount:0} )  
+            const user = await users.get(i)
+
+            const aux = await collection.insert( {_id:uuid(), order:i, name: user.name, address: user.address, totalAmount:0, transactions: 0} ) 
+            console.log(aux.result) 
+            console.log(`name: ${user.name}`)
+            
+            if(aux.result.ok !== 1)
+                throw new Error(`user with name: ${user.name} and id ${user.id} not saved correctly`)
         }
     }
 
@@ -60,7 +66,7 @@ class CreateDB
             let collection2 = this.database.collection(collectionUsers)
             collection2.remove() 
 
-            this.storeUsers(collection2, users)
+            await this.storeUsers(collection2, users)
             
         }catch(err) {
             console.log(err) //eslint-disable-line 
