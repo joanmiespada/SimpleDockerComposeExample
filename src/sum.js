@@ -12,27 +12,20 @@ class Sum
     {
         const collectUsers = this.database.collection(collectionUsers)
         const collecTrans = this.database.collection(collectionTrans)
-        const cursorTrans =  collecTrans.find({})
+        const cursorTrans =  collecTrans.find()
 
         const counters = {smallest: 0, largest:0, withoutRef:{items:0, total:0 } }
 
         while(cursorTrans.hasNext() && !cursorTrans.isClosed())
         {
             const doc = await cursorTrans.next()
-            //console.log(doc.data.transactions[0])
-
-            //cursorTrans.forEach(doc => 
-            //cursorTrans.next().then( doc=>
+           
             const transactions = doc.data.transactions
             for(let i=0; i<transactions.length; i++)
             {
                 const operation = transactions[i]
-                //doc.data.transactions.forEach( async (operation) =>{ 
-                    
                 if(operation.confirmations >= minimumApprovals)
                 {
-
-                    
                     const user = await collectUsers.findOne({ address: operation.address })
                     const isNum = isNumber(operation.amount)
                     if(user && isNum){
@@ -56,19 +49,12 @@ class Sum
                     if(operation.amount < counters.smallest)
                             counters.smallest = operation.amount
 
-                    //userTotalAmoun.map( (x,i)=> `${i}  ammount: ${x}`)    
-                }//else
-                 //console.log(`transaction not enough confirmations `)    
-                //})
+                       
+                }
             }
-         //)
         }
-        
         return counters;
-        
-        
     }
-    
 }
 
 export default Sum
