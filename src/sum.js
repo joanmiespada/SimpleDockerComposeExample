@@ -1,5 +1,4 @@
 import {collectionTrans, collectionUsers, minimumApprovals } from './constants'
-import { isNumber } from 'util';
 
 class Sum
 {
@@ -21,14 +20,15 @@ class Sum
             const doc = await cursorTrans.next()
            
             const transactions = doc.data.transactions
-            for(let i=0; i<transactions.length; i++)
+            for(let i=0; i<transactions.length; i++) 
             {
                 const operation = transactions[i]
                 if(operation.confirmations >= minimumApprovals)
                 {
+                    
                     const user = await collectUsers.findOne({ address: operation.address })
-                    const isNum = isNumber(operation.amount)
-                    if(user && isNum){
+                    
+                    if(user){
                         let newTotalAmount =0, newTotalTransactions=0;
 
                         newTotalAmount = user.totalAmount + operation.amount

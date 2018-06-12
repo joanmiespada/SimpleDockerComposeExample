@@ -13,17 +13,16 @@
     "eslint": "^4.19.1",
     "eslint-plugin-babel": "^5.1.0",
     "eslint-plugin-jest": "^21.17.0",
-    "eslint-plugin-node": "^6.0.1",
-    "jest": "^23.1.0"
+    "eslint-plugin-node": "^6.0.1"
   },
   "scripts": {
     "pretest": "eslint -c ./.eslintrc ./src",
-    "test": "jest ./src/* --verbose --env=node --coverage",
-    "build": "babel src -d ./build",
-    "start": "babel-node ./src/index.js"
+    "build": "babel ./src -d ./build",
+    "start:dev": "babel-node ./src/index.js",
+    "start:prod": "node ./build/index.js",
+    "ver": "babel --version"
   },
   "dependencies": {
-    "immutable": "^3.8.2",
     "mongodb": "^3.0.10",
     "path": "^0.12.7",
     "uuid": "^3.2.1"

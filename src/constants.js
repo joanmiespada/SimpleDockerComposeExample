@@ -3,3 +3,4 @@ export const urlmongo =  'mongodb://localhost:27017'
 export const collectionTrans = 'transactions'
 export const collectionUsers = 'users'
 export const minimumApprovals = 6 
+export const everyThingIsOk = 1
