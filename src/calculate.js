@@ -1,6 +1,6 @@
 import {collectionTrans, collectionUsers, minimumApprovals } from './constants'
 
-class Sum
+class Calculate
 {
     constructor(database)
     {
@@ -57,4 +57,4 @@ class Sum
     }
 }
 
-export default Sum
+export default Calculate

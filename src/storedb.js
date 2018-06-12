@@ -3,7 +3,7 @@ import fs from 'fs'
 import {collectionTrans, collectionUsers, everyThingIsOk } from './constants'
 import uuid from 'uuid/v1'
 
-class CreateDB
+class StoreDB
 { 
     constructor(database)
     {
@@ -100,4 +100,4 @@ class CreateDB
     }
 }
 
-export default CreateDB
+export default StoreDB

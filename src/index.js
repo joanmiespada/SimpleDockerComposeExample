@@ -1,8 +1,8 @@
 import mongo from 'mongodb'
-import CreateDB from './createdb'
-import Sum from './sum'
+import StoreDB from './storedb'
+import Calculate from './calculate'
 import Render from './render'
-import {urlmongo, dbname} from './constants'
+import {urlMongoContainer, urlMongoLocalhost, dbName} from './constants'
 
 
 const files = [ 'transactions-1.json',
@@ -17,18 +17,23 @@ const listOfusers = [
     {name:'James T. Kirk', address:'miTHhiX3iFhVnAEecLjybxvV5g8mKYTtnM'},
     {name:'Spock', address:'mvcyJMiAcSXKAEsQxbW9TYZ369rsMG6rVV'}
 ]
+let urlMongo
+if(process.env.NODE_ENV === 'development')
+    urlMongo = urlMongoLocalhost
+else
+    urlMongo = urlMongoContainer
 
 try{
 
-    mongo.MongoClient.connect(urlmongo).then( client =>{
+    mongo.MongoClient.connect(urlMongo).then( client =>{
 
-        const database = client.db(dbname)
+        const database = client.db(dbName)
 
-        const data = new CreateDB(database)
+        const data = new StoreDB(database)
 
         data.loadMainData(files,listOfusers).then(()=>{
             
-            const operate = new Sum(database)
+            const operate = new Calculate(database)
 
             operate.start()
                 .then((tops)=> {

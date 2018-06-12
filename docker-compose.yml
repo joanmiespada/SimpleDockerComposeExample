@@ -1,9 +1,10 @@
-version: '3.3'
+version: '3.5'
 
 services:
 
   mongoDatabase:
     image: mongo:latest
+    container_name: blockchain_db
     restart: always
     ports:
       - "27017:27017"   
@@ -13,7 +14,9 @@ services:
       - backtier
   
   transactions:
+    container_name: blockchain_app
     build: .
+    command: npm run start:prod
     depends_on: 
       - mongoDatabase
     networks: 
@@ -23,3 +26,4 @@ volumes:
   mongo-data:
 networks: 
   backtier:
+    driver: bridge

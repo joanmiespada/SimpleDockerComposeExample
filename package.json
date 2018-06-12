@@ -16,11 +16,10 @@
     "eslint-plugin-node": "^6.0.1"
   },
   "scripts": {
-    "pretest": "eslint -c ./.eslintrc ./src",
+    "linter": "eslint -c ./.eslintrc ./src",
     "build": "babel ./src -d ./build",
-    "start:dev": "babel-node ./src/index.js",
-    "start:prod": "node ./build/index.js",
-    "ver": "babel --version"
+    "start:dev": "NODE_ENV=development babel-node ./src/index.js",
+    "start:prod": "node ./build/index.js"
   },
   "dependencies": {
     "mongodb": "^3.0.10",
